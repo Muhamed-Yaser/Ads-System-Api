@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Category;
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,10 +20,10 @@ class AdFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'category_id' => rand(1, 8),
-            'title' => fake()->title,
+            'group_id' =>rand(1, Group::count()),
+            'title' => fake()->word,
             'slug'  => fake()->slug,
-            'text'  => fake()->text(200),
+            'text'  => fake()->text(100),
             'phone' => fake()->phoneNumber,
             'status' => 1
         ];

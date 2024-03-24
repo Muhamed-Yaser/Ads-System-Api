@@ -1,0 +1,76 @@
+<?php
+namespace  App\Services;
+
+use App\Models\Ad;
+use App\Helpers\ApiResponse;
+use App\Http\Resources\AdResource;
+
+class AdService {
+
+    public function index()
+    {
+        $ads = Ad::paginate(1);
+
+        if (count($ads) > 0) {
+
+            if ($ads->total() > $ads->perPage()) {
+                $data = [
+                    'records' => AdResource::collection($ads),
+                    'pagination' => [
+                        'current_page' => url($ads->currentPage()),
+                        'first_page' => $ads->url($ads->firstItem()),
+                        'last_page' => $ads->url($ads->lastPage()),
+                        'total' => $ads->total(),
+                    ]
+                ];
+                if ($ads->hasMorePages()) {
+                    $data['pagination']['next_page'] = $ads->nextPageUrl();
+                }
+
+                if ($ads->previousPageUrl()) {
+                    $data['pagination']['previous_page'] = $ads->previousPageUrl();
+                }
+            } else {
+                $data = AdResource::collection($ads);
+            }
+
+            return ApiResponse::success(200, 'Success to get ads', $data);
+        }
+        return ApiResponse::error(200, 'fialed to get ads', []);
+    }
+
+    public function show()
+    {
+        $ads = Ad::paginate(1);
+
+        if (count($ads) > 0) {
+
+            if ($ads->total() > $ads->perPage()) {
+                $data = [
+                    'records' => AdResource::collection($ads),
+                    'pagination' => [
+                        'current_page' => url($ads->currentPage()),
+                        'first_page' => $ads->url($ads->firstItem()),
+                        'last_page' => $ads->url($ads->lastPage()),
+                        'total' => $ads->total(),
+                    ]
+                ];
+                if ($ads->hasMorePages()) {
+                    $data['pagination']['next_page'] = $ads->nextPageUrl();
+                }
+
+                if ($ads->previousPageUrl()) {
+                    $data['pagination']['previous_page'] = $ads->previousPageUrl();
+                }
+            } else {
+                $data = AdResource::collection($ads);
+            }
+
+            return ApiResponse::success(200, 'Success to get ads', $data);
+        }
+        return ApiResponse::error(200, 'fialed to get ads', []);
+    }
+}
+
+
+//ddddddddddddddddddd

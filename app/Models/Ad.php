@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
-use App\Models\Category;
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,12 +13,11 @@ class Ad extends Model
 
     protected $fillable = [
         'user_id',
-        'category_id',
+        'group_id',
         'title',
         'slug',
         'text',
         'phone',
-        'status'
     ];
 
      //-------------Relationships--------------//
@@ -28,8 +27,8 @@ class Ad extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category () {
+    public function group () {
 
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Group::class);
     }
 }

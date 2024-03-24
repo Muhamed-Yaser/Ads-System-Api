@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('domain_id');
+            $table->unsignedBigInteger('group_id');
             $table->string('title');
             $table->string('slug');
             $table->text('text');
             $table->string('phone');
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

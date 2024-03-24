@@ -13,7 +13,6 @@ class AdsTableSeeder extends Seeder
      */
     public function run(): void
     {
-       $ads = Ad::factory(10)->create();
-       dd($ads);
+        Ad::factory(10)->create();
     }
 }
