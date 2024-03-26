@@ -2,118 +2,62 @@
 
 namespace App\Services;
 
+use Exception;
 use App\Models\Ad;
-use App\Helpers\ApiResponse;
+use App\Traits\ApiResponseTrait;
 use App\Http\Requests\Adrequest;
+use Illuminate\Http\JsonResponse;
 use App\Http\Resources\AdResource;
+use Illuminate\Support\Facades\DB;
 
 class AdService
 {
 
+    use ApiResponseTrait;
+
     public function index()
     {
-        $ads = Ad::paginate(3);
-
-        if (count($ads) > 0) {
-
-            if ($ads->total() > $ads->perPage()) {
-                $data = [
-                    'records' => AdResource::collection($ads),
-                    'pagination' => [
-                        'current_page' => url($ads->currentPage()),
-                        'first_page' => $ads->url($ads->firstItem()),
-                        'last_page' => $ads->url($ads->lastPage()),
-                        'total' => $ads->total(),
-                    ]
-                ];
-                if ($ads->hasMorePages()) {
-                    $data['pagination']['next_page'] = $ads->nextPageUrl();
-                }
-
-                if ($ads->previousPageUrl()) {
-                    $data['pagination']['previous_page'] = $ads->previousPageUrl();
-                }
-            } else {
-                $data = AdResource::collection($ads);
-            }
-
-            return ApiResponse::success(200, 'Success to get ads', $data);
-        }
-        return ApiResponse::error(200, 'fialed to get ads', []);
+        return  Ad::paginate(15) ?? [];
     }
 
-    public function storeAd(Adrequest $request)
+    public function storeAd($request)
     {
-        //$data = $request->validated();
-        //$data['user_id'] = $request->user()->id;
-        //$ad = Ad::create($data);
-
-        $ad = $request->validated();
-        $ad = Ad::create([
-            'title' => $request->title,
-            'text' => $request->text,
-            'phone' => $request->phone,
-            'user_id' => auth()->user()->id,
-            'group_id' => $request->group_id,
-            'slug' => 'slug',
-            'status' => 'status',
-        ]);
-
-        return $ad;
+        $data = $request->validated();
+        Ad::create($data);
     }
 
     public function show()
     {
-        $ads = Ad::where('user_id', auth()->user()->id)->paginate(1);
-
-        if (count($ads) > 0) {
-
-            if ($ads->total() > $ads->perPage()) {
-                $data = [
-                    'records' => AdResource::collection($ads),
-                    'pagination' => [
-                        'current_page' => url($ads->currentPage()),
-                        'first_page' => $ads->url($ads->firstItem()),
-                        'last_page' => $ads->url($ads->lastPage()),
-                        'total' => $ads->total(),
-                    ]
-                ];
-                if ($ads->hasMorePages()) {
-                    $data['pagination']['next_page'] = $ads->nextPageUrl();
-                }
-
-                if ($ads->previousPageUrl()) {
-                    $data['pagination']['previous_page'] = $ads->previousPageUrl();
-                }
-            } else {
-                $data = AdResource::collection($ads);
-            }
-
-            return ApiResponse::success(200, 'Success to get ads', $data);
-        }
-        return ApiResponse::error(200, 'fialed to get ads', []);
+        return  Ad::where('user_id', auth()->user()->id)->paginate(10) ?? [];
     }
 
-    // public function updateAd($request, $adId): mixed
-    // {
+    public function updateAd($request, $adId): JsonResponse
+    {
+        $adIdExists = DB::table('ads')->where('id', $adId)->exists();
 
-    //     $ad = Ad::findOrFail($adId);
-    //     if ($ad->user_id != auth()->user()->id)  return ApiResponse::error(403, 'You are not allwoed to do this action', []);
+        if (!$adIdExists) {
 
-    //     $data = $request->validated();
-    //     $updatedAd = $ad->update($data);
+            return $this->error(__('site.Ad not found'), 404);
+        }
 
-    //     if ($updatedAd) return ApiResponse::success(201, 'Updated successfully',new AdResource($ad));
-   // }
+        $ad = Ad::findOrFail($adId);
+
+        abort_if(auth()->user()->id != $ad->user_id, 403, __('site.You are not allalowed to edit this ad.'));
+
+        $data = $request->validated();
+
+        $ad->update($data);
+
+
+        return $this->success([], __('site.Ad updated successfully'), 200);
+    }
 
     public function destroyAd($adId)
     {
+        $ad = Ad::whereId($adId)->first();
 
-        $ad = Ad::findOrFail($adId);
-        if ($ad->user_id != auth()->user()->id)  return ApiResponse::error(403, 'You are not allwoed to do this action', []);
+        abort_if(auth()->user()->id != $ad->user_id, 403, __('site.You are not allalowed to delete this ad.'));
 
-        $deletRecord = $ad->delete();
-
-        return $deletRecord;
+        $ad->delete();
     }
 }
