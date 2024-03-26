@@ -24,6 +24,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::pattern('adId' , '[0-9]+');
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
@@ -35,11 +36,11 @@ class RouteServiceProvider extends ServiceProvider
 
                 Route::middleware('api')
                 ->prefix('api')
-                ->group(base_path('routes/auth.php'));
+                ->group(base_path('routes/user.php'));
 
                 Route::middleware('api')
                 ->prefix('api')
-                ->group(base_path('routes/auth.php'));
+                ->group(base_path('routes/admin.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
