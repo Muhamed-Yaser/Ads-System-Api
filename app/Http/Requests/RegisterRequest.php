@@ -38,7 +38,7 @@ class RegisterRequest extends FormRequest
             'password' => 'required', Rules\Password::default(),
         ];
     }
-// |confirmed
+
 
     public function attributes()
     {
