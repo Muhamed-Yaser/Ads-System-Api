@@ -11,6 +11,17 @@ class Ad extends Model
 {
     use HasFactory;
 
+
+    // events || createing => this function used for createing data in table in insert and update for columns
+    public static function boot()
+    {
+
+        parent::boot();
+        static::creating(function (Ad $ad) {
+            $ad->user_id = auth()->user()->id;
+        });
+    }
+
     protected $fillable = [
         'user_id',
         'group_id',
@@ -20,14 +31,16 @@ class Ad extends Model
         'phone',
     ];
 
-     //-------------Relationships--------------//
+    # Relationships
 
-     public function user () {
+    public function user()
+    {
 
         return $this->belongsTo(User::class);
     }
 
-    public function group () {
+    public function group()
+    {
 
         return $this->belongsTo(Group::class);
     }
