@@ -17,14 +17,14 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
     {
-        Route::pattern('adId' , '[0-9]+');
+        Route::pattern('adId', '[0-9]+');
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
@@ -34,12 +34,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-                Route::middleware('api')
+            Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/user.php'));
 
-                Route::middleware('api')
-                ->prefix('api')
+            Route::middleware('web')
                 ->group(base_path('routes/admin.php'));
 
             Route::middleware('web')

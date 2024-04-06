@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Adrequest;
 use App\Http\Resources\AdResource;
 use App\Models\Ad;
-use App\Services\AdService;
+use App\Services\UserServices\AdService;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,9 +29,7 @@ class AdController extends Controller
 
     public function store(Adrequest $request)
     {
-        $ad = $this->adService->storeAd($request);
-
-        if ($ad) return ApiResponse::success(201, 'Ad created', new AdResource($ad));
+        return $this->adService->storeAd($request);
     }
 
     public function show()
@@ -41,20 +39,11 @@ class AdController extends Controller
 
     public function update(Adrequest $request, $adId)
     {
-        //$this->adService->updateAd($request,  $adId);
-        $ad = Ad::findOrFail($adId);
-        if ($ad->user_id != auth()->user()->id)  return ApiResponse::error(403, 'You are not allwoed to do this action', []);
-
-        $data = $request->validated();
-        $updatedAd = $ad->update($data);
-
-        if ($updatedAd) return ApiResponse::success(201, 'Updated successfully',new AdResource($ad));
+        return $this->adService->updateAd($request, $adId) ?? null;
     }
 
     public function destroy($adId)
     {
-        $deletRecord = $this->adService->destroyAd($adId);
-
-        if ($deletRecord) return  ApiResponse::success(200, 'Deleted Successfully', []);
+        return $this->adService->destroyAd($adId);
     }
 }

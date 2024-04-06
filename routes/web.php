@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Api\Auth\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/ads', function () {
+    return view('Dashboard.Ads');
+});
+
+Route::get('/addCity', function () {
+    return view('Dashboard.Addcities');
 });

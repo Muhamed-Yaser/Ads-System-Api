@@ -2,10 +2,11 @@
 
 namespace  App\Helpers;
 
+use Illuminate\Http\JsonResponse;
 
 class ApiResponse
 {
-    public static function success($statusCode = 200, $msg = null, $data = [])
+    public static function success($statusCode = 200, $msg = null, $data = []) :JsonResponse
     {
 
         return response()->json([

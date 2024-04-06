@@ -26,6 +26,7 @@ Route::controller(UserController::class)->prefix('auth/user')->group(function ()
 
     Route::post('/register', 'register');
     Route::post('/login', 'login');
+    Route::get('/profile', 'myProfile');
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
 

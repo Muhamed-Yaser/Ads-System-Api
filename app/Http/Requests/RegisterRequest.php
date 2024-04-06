@@ -35,7 +35,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|confirmed' , Rules\Password::default(),
+            'password' => 'required', Rules\Password::default(),
         ];
     }
 

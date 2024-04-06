@@ -2,48 +2,47 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRequests\AdminAuthRequest;
+use App\Services\AdminServices\AdminAuthService;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $adminAuthService;
+
+    public function __construct(AdminAuthService $adminAuthService)
     {
-        //
+        $this->adminAuthService = $adminAuthService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function loginPage()
     {
-        //
+        return view('auth/login');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function login(AdminAuthRequest $request)
     {
-        //
+        return $this->adminAuthService->loginAdmin($request);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function adminAuthenticated()
     {
-        //
+        return $this->adminAuthService->checkAuthenticated();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function profile()
     {
-        //
+        return $this->adminAuthService->profileAdmin();
+    }
+
+    public function editProfile()
+    {
+        return $this->adminAuthService->editProfileAdmin();
+    }
+
+    public function updateProfile(AdminAuthRequest $request)
+    {
+        return $this->adminAuthService->updateProfileAdmin($request);
     }
 }
