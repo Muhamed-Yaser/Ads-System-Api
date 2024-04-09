@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,5 +18,10 @@ class AdController extends Controller
     public function index()
     {
         return $this->adService->index();
+    }
+
+    public function destroy($adId)
+    {
+        return $this->adService->destroy($adId);
     }
 }

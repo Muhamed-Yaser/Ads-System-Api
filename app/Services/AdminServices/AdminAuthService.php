@@ -11,9 +11,9 @@ class AdminAuthService
     public function loginAdmin($request)
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
 
-            $request->session()->regenerate();
+            session()->regenerate();
             return redirect()->route('Dashboard.index');
         } else {
 
@@ -23,7 +23,7 @@ class AdminAuthService
 
     public function checkAuthenticated()
     {
-        if (!auth()->check()) {
+        if (!auth()->guard('admin')->check()) {
 
             return redirect()->route('auth.login');
         }
@@ -32,23 +32,28 @@ class AdminAuthService
     public function profileAdmin()
     {
         $this->checkAuthenticated();
-        return view('Dashboard.profile');
+        return view('Dashboard.Profile.profile');
     }
 
     public function editProfileAdmin()
     {
-        $admin = auth()->user();
-        return view('Dashboard.editProfile', compact('admin'));
+        $admin = auth()->guard('admin')->user();
+        return view('Dashboard.Profile.editProfile', compact('admin'));
     }
 
     public function updateProfileAdmin($request)
     {
-        $admin = auth()->user();
+        auth()->guard('admin')->user()->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ]);
 
-        $admin->name = $request->input('name');
-        $admin->email = $request->input('email');
-        $admin->save();
+        return redirect()->route('profile');
+    }
 
-        return redirect()->route('Dashboard.editProfile')->with('success', 'Profile updated successfully');
+    public function logout ()
+    {
+        auth()->guard('admin')->logout();
+        return redirect()->route('loginPage');
     }
 }

@@ -9,5 +9,13 @@ class Setting extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'about_us',
+        'facebook',
+        'twitter',
+        'instagram',
+        'terms',
+        'phone',
+        'email'
+    ];
 }

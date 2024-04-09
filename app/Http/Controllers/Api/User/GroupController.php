@@ -12,7 +12,7 @@ class GroupController extends Controller
 {
     public function __invoke()
     {
-        // Get all categories from database
+        // Get all groups from database
         $groups = Group::all();
 
         if($groups) return ApiResponse::success(200 , 'groups retrived successfully' , GroupResource::collection($groups));

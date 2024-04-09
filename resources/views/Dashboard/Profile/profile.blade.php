@@ -72,8 +72,8 @@
     <h1>Admin Profile</h1>
     <div class="profile-info">
         <h2>Personal Information</h2>
-        <p>Name: {{ auth()->user()->name }}</p>
-        <p>Email: {{ auth()->user()->email }}</p>
+        <p>Name: {{ auth()->guard('admin')->user()->name }}</p>
+        <p>Email: {{ auth()->guard('admin')->user()->email }}</p>
         <p>Role: Admin</p>
     </div>
     <div class="profile-info">
@@ -81,7 +81,7 @@
         <p>Phone: 123-456-7890</p>
         <p>Address: 123 Main St, City, Country</p>
     </div>
-    <a href="{{ route('Dashboard.editProfile') }}" class="btn">Edit Profile</a>
+    <a href="{{ route('editProfile') }}" class="btn">Edit Profile</a>
 </div>
 @endsection
 

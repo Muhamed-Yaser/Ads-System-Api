@@ -2,13 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Admin\AdController;
-use App\Http\Controllers\Api\User\CityController;
-use App\Http\Controllers\Api\User\GroupController;
-use App\Http\Controllers\Api\User\AdViewController;
-use App\Http\Controllers\Api\User\MessageController;
-use App\Http\Controllers\Api\User\SettingController;
-use App\Http\Controllers\Api\User\DistrictController;
+use App\Http\Controllers\Admin\AdController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\GroupController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Api\Auth\AdminController;
 /*
 |--------------------------------------------------------------------------
@@ -20,54 +19,79 @@ use App\Http\Controllers\Api\Auth\AdminController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 //authAdmin
 Route::controller(AdminController::class)->prefix('admin')->group(function () {
-
-    //Route::middleware('isAdmin')->group(function(){
 
     Route::get('login', 'loginPage')->name('loginPage');
     Route::post('login', 'login')->name('login');
 
 
-    Route::get('/profile', 'profile')->name('Dashboard.profile');
-    Route::get('/editProfile', 'editProfile')->name('Dashboard.editProfile');
+    Route::get('/profile', 'profile')->name('profile');
+    Route::get('/editProfile', 'editProfile')->name('editProfile');
     Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
 
-    Route::post('/logout', 'logout');
-    //});
+    Route::get('/logout', 'logout')->name('logout');
 });
 
 //ads
 Route::controller(AdController::class)->group(function () {
 
     Route::get("/index", 'index')->name('Dashboard.index');
-    Route::get("/deleteAd/{adId}", 'destroy')->name('destroy');
+    Route::post("/destroy/{adId}", 'destroy')->name('destroy');
 });
 
+// //City
+Route::controller(CityController::class)->group(function () {
+    Route::get('cities', 'index')->name('cities');
 
-//Oprations on ads
-Route::controller(AdViewController::class)->prefix('ads')->group(function () {
+    Route::get('addCityPage', 'create')->name('addCityPage');
+    Route::post('storeCity', 'store')->name('storeCity');
 
-    Route::get("/latestAds", 'latest');
-    Route::get("/group/{group_id}", 'group');
-    Route::get("/search", 'search');
+    Route::get('EditCityPage/{cityId}', 'edit')->name('editCityPage');
+    Route::post('updateCity/{cityId}', 'update')->name('updateCity');
+
+    Route::post('deleteCity/{cityId}', 'destroy')->name('deleteCity');
 });
 
-//Settings
-Route::get('/settings', SettingController::class);
+// //District
+Route::controller(DistrictController::class)->group(function () {
+    Route::get('districts', 'index')->name('districts');
 
-//City
-Route::get('/cities', CityController::class);
+    Route::get('addDistrictPage', 'create')->name('addDistrictPage');
+    Route::post('storeDistrict', 'store')->name('storeDistrict');
 
-//District
-Route::get('/districts', DistrictController::class);
+    Route::get('EditDistrictPage/{districtId}', 'edit')->name('editDistrictPage');
+    Route::post('updateDistrict/{districtId}', 'update')->name('updateDistrict');
 
-//Message
-Route::post('/message', MessageController::class);
+    Route::post('deleteDistrict/{districtId}', 'destroy')->name('deleteDistrict');
+});
 
-//groups
-Route::get('/groups', GroupController::class);
+// //Group => المحافظة !!
+Route::controller(GroupController::class)->group(function () {
+    Route::get('groups', 'index')->name('groups');
+
+    Route::get('addrGroupPage', 'create')->name('addGroupPage');
+    Route::post('storeGroup', 'store')->name('storeGroup');
+
+    Route::get('EditGroupPage/{groupId}', 'edit')->name('editGroupPage');
+    Route::post('updateGroup/{groupId}', 'update')->name('updateGroup');
+
+    Route::post('deleteGroup/{groupId}', 'destroy')->name('deleteGroup');
+});
+
+// //Message
+Route::controller(MessageController::class)->group(function () {
+
+    Route::get("/messages", 'index')->name('messages');
+    Route::post("/destroyMessage/{messageId}", 'destroyMessage')->name('destroyMessage');
+});
+
+//Settings---About Us---
+Route::controller(SettingController::class)->group(function () {
+    Route::get('settings', 'index')->name('settings');
+
+    Route::post('updatesettings/{settingId}', 'updateSettings')->name('updateAllSettings');
+});
 
 //fallback
 Route::fallback(function () {

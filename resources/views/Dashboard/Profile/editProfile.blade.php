@@ -24,7 +24,7 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="{{ $admin->email }}">
             </div>
-            <button type="submit">Update Profile</button>
+                <button type="submit">Update Profile</button>
 
         </form>
     </div>

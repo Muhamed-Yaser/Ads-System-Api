@@ -17,11 +17,11 @@ class AdminAuthRequest extends FormRequest
     {
         return true;
     }
-   
+
     public function rules(): array
     {
         return [
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|exists:admins,email',
             'password' => 'required'
         ];
     }

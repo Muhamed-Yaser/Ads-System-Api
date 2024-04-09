@@ -14,7 +14,7 @@ class CityController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         $cities = City::all();
         if ($cities) return ApiResponse::success(200, 'Cities retrived successfully', CityResource::collection($cities));

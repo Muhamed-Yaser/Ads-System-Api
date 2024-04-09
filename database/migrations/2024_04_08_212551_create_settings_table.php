@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('about_us')->default('About Us');
-            $table->string('why_us')->default('why us');
-            $table->string('our_goal')->default('Our Goal');
-            $table->string('our_vesion')->nullable(true);
+            $table->string('about_us');
+            $table->string('facebook');
+            $table->string('twitter');
+            $table->string('instagram');
+            $table->string('terms');
+            $table->string('phone');
+            $table->string('email');
             $table->timestamps();
         });
     }

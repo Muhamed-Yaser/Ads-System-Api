@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('Dashboard.layouts.master')
 
 @section('title')
 
@@ -10,20 +10,9 @@
 @stop
 
 
-@section('page_name')
-
-@endsection
-
-
 @section('content')
 
 @endsection
-
-
-@section('')
-
-@endsection
-
 
 @section('scripts')
 

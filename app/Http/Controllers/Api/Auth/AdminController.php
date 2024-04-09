@@ -18,7 +18,8 @@ class AdminController extends Controller
 
     public function loginPage()
     {
-        return view('auth/login');
+
+        return view('auth.login');
     }
 
     public function login(AdminAuthRequest $request)
@@ -38,11 +39,19 @@ class AdminController extends Controller
 
     public function editProfile()
     {
+        if (!auth()->guard('admin')->check()) {
+            return redirect()->route('loginPage');
+        }
         return $this->adminAuthService->editProfileAdmin();
     }
 
-    public function updateProfile(AdminAuthRequest $request)
+    public function updateProfile(Request $request)
     {
         return $this->adminAuthService->updateProfileAdmin($request);
+    }
+
+    public function logout()
+    {
+        return $this->adminAuthService->logout();
     }
 }
